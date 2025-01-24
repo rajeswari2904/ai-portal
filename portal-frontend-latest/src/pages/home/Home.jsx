@@ -174,7 +174,7 @@ function Home() {
               right:isFullscreen ? "10px" : "100px",
               top:isFullscreen ? "70px" : "180px",
               border: "none",
-              color:"#0d6efd",
+              color:"darkblue",
               backgroundColor:"white",
               borderRadius:"5px",
               fontSize:"20px"
