@@ -134,6 +134,11 @@ input[type="file"]:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.521);
 }
 
+.screen-btn:disabled {
+  color: #0d6dfdb2;
+}
+
+
 textarea {
   transition: all 0.3s ease-in-out;
 }

@@ -166,7 +166,7 @@ function Home() {
           <button
             type="button"
             className="screen-btn"
-            //disabled={!transcript}
+            disabled={!transcript}
             onClick={toggleFullscreen}
             style={{
               zIndex:"1100",
