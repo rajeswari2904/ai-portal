@@ -22,7 +22,8 @@ h3 {
 
 .audio-box {
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
+  height: 300px;
   padding: 30px;
   background-color: #fff;
   box-shadow: 0 4px 8px #063172a6;
@@ -32,18 +33,21 @@ h3 {
 
 .transcript-box {
   width: 100%;
-  max-width: 60%;
-  margin: 25px;
+  max-width: 70%;
+  min-height: 450px; /* Adjust height as needed */
+  margin: 25px 0 25px 25px;
   padding: 30px;
   background-color: #fff;
   box-shadow: 0 4px 8px #063172a6;
   border-radius: 10px;
+  position: relative; 
 }
 
 
 .transcript-btn {
-  position: relative;
-  left: 80%;
+  position: absolute;
+  top: 15px;
+  right: 70px;
 }
 
 .transcript-btn:disabled {
@@ -107,7 +111,7 @@ h3 {
 .loader-text {
   margin-top: 10px;
   font-size: 1.2rem;
-  color: #000000;
+  color: #ffffff;
   animation: fadeIn 1.5s ease-in-out;
 }
 @keyframes fadeIn {

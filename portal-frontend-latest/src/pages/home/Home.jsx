@@ -123,7 +123,7 @@ function Home() {
       <div className="audio-wrapper">
         <div className="audio-box">
           <div className="upload">
-            <h4 style={{ margin: "10px 0 25px 0" }}>Upload your audio file</h4>
+            <h5 style={{ margin: "10px 0 25px 0" }}>Upload your audio file</h5>
             <input
               type="file"
               id="audio-upload"
@@ -138,10 +138,10 @@ function Home() {
             >
               Upload
             </button>
-            <p style={{ color: "gray", fontSize: "15px", marginTop:"10px"}}>
+            <p style={{ color: "gray", fontSize: "13px", marginTop:"10px"}}>
               Supported File Formats: mp3, m4a, mpeg
             </p>
-            <p style={{ color: "gray", fontSize: "15px" }}>Max Size: 25MB</p>
+            <p style={{ color: "gray", fontSize: "13px" }}>Max Size: 25MB</p>
           </div>
           <div className="form-check mt-3" style={{ display: "flex" }}>
             <input
@@ -153,7 +153,7 @@ function Home() {
               onChange={() => setSaveTranscript(!saveTranscript)}
               disabled="true"
             />
-            <label className="form-check-label" htmlFor="flexCheckDefault">
+            <label className="form-check-label" htmlFor="flexCheckDefault" style={{ fontSize: "15px" }}>
               Save audio file and transcript
             </label>
           </div>
@@ -162,6 +162,14 @@ function Home() {
           <label htmlFor="transcript" className="form-label label">
             Transcript
           </label>
+          <button
+            type="button"
+            className="btn btn-primary transcript-btn"
+            onClick={() => handleExport(transcript)}
+            disabled={!transcript} // Disable if no transcript
+          >
+            Export Transcript
+          </button>
           {/* new */}
           <button
             type="button"
@@ -170,8 +178,8 @@ function Home() {
             onClick={toggleFullscreen}
             style={{
               zIndex:"1100",
-              position:"absolute",
-              right:isFullscreen ? "10px" : "100px",
+              position:"fixed",
+              right:isFullscreen ? "10px" : "70px",
               top:isFullscreen ? "70px" : "180px",
               border: "none",
               color:"darkblue",
@@ -196,7 +204,7 @@ function Home() {
             /* new */
             style={{
               width: isFullscreen ? "100vw" : "100%",
-              height: isFullscreen ? "90vh" : "300px",
+              height: isFullscreen ? "90vh" : "350px",
               position: isFullscreen ? "fixed" : "relative",
               bottom: isFullscreen ? 0 : "auto",
               left: isFullscreen ? 0 : "auto",
@@ -210,14 +218,6 @@ function Home() {
             }}
             /* new */
           ></textarea>
-          <button
-            type="button"
-            className="btn btn-primary mt-2 transcript-btn"
-            onClick={() => handleExport(transcript)}
-            disabled={!transcript} // Disable if no transcript
-          >
-            Export Transcript
-          </button>
         </div>
       </div>
     </div>
