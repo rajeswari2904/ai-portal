@@ -64,7 +64,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/login`,
+        `http://localhost:8080/auth/login`,
         null, // No body, as params will be passed in the URL
         {
           params: {
@@ -76,7 +76,6 @@ function Login() {
       console.log(response);
 
       if (response.status === 200) {
-
         const token = response.data; // Extract JWT token
 
         // Store token securely in sessionStorage

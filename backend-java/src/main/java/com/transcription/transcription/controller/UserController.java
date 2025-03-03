@@ -1,5 +1,4 @@
 package com.transcription.transcription.controller;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -32,11 +31,10 @@ import com.transcription.transcription.service.UploadService;
 import com.transcription.transcription.service.UserService;
 import java.nio.file.Files;
 import java.io.File;
-
 @RestController
-@RequestMapping("api")
+@RequestMapping("/auth")
 @CrossOrigin("*")
-public class UploadController {
+public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class.getName());
 	private static final String AUDIO_FOLDER = "D:\\AI-Portal-FInal\\transcription\\transcription\\temp_audio\\";
@@ -52,7 +50,43 @@ public class UploadController {
     
     @Autowired
     private  PasswordEncoder passwordEncoder;
-	// File upload API
+
+    @PostMapping("/create")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        try {
+        	
+        	String hashedPassword = passwordEncoder.encode(user.getPassword());
+        	System.out.println(hashedPassword);
+            User createdUser = userService.createUser(user.getUsername(), hashedPassword);
+            return ResponseEntity.ok(createdUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    // Login API
+    @PostMapping("/login")
+    public String authenticateUser(@RequestParam String username, @RequestParam String password) {
+        //return userService.findByUsername(username,password)
+                //.map(user -> {
+                    //if (user.getPassword().equals(password)) {
+                        ////return ResponseEntity.ok("Authentication successful");
+                    //} else {
+                        //return ResponseEntity.status(401).body("Invalid credentials");
+                   // }
+                //})
+                //.orElse(ResponseEntity.status(404).body("User not found"));
+
+    	Optional<User> user = Optional.ofNullable(userService.findByUsername(username,password));
+        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
+            String token = jwtUtil.generateToken(username);
+            return token;
+        }
+        throw new RuntimeException("Invalid username or password");
+    }
+    
+
+    // File upload API
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("audioFile") MultipartFile audioFile,
                                         @RequestParam("saveTranscript") boolean saveTranscript,
@@ -63,7 +97,7 @@ public class UploadController {
 //        if (user == null) {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
 //        }
-    	String apiUrl = "http://172.30.44.172:8001/transcribe/";
+    	String apiUrl = "http://127.0.0.1:8001/transcribe/";
     	File folder = new File(AUDIO_FOLDER);
         if (!folder.exists() && !folder.mkdirs()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -170,5 +204,53 @@ public class UploadController {
         }
     }
 
-
+    // Method to get audio duration (stub for real logic)
+//    private int getAudioDuration(MultipartFile file) {
+//    	// Convert MultipartFile to InputStream
+//        InputStream audioStream = file.getInputStream();
+//
+//        // Create an AudioDispatcher that reads the audio data
+//        AudioDispatcher dispatcher = AudioDispatcherFactory.fromPipe(audioStream, 44100, 1024, 512);
+//        
+//        // Initialize a variable to track the number of audio frames
+//        int totalFrames = 0;
+//
+//        // Loop through the audio data and count the frames
+//        dispatcher.addAudioEventListener(new AudioEventListener() {
+//            @Override
+//            public void audioEvent(AudioEvent audioEvent) {
+//                totalFrames += audioEvent.getBuffer().length;
+//            }
+//        });
+//
+//        // Start processing the audio stream
+//        dispatcher.run();
+//
+//        // Get the sample rate (in Hz) - default for most audio files is 44100 Hz
+//        int sampleRate = 44100;
+//
+//        // Calculate the duration in seconds
+//        double durationInSeconds = totalFrames / (double) sampleRate;
+//
+//        // Convert to an integer (or use it as a double depending on your needs)
+//        return (int) durationInSeconds;  // Duration in seconds
+//    }
+//   
+//    // API for exporting the transcript
+//    @GetMapping("/downloadTranscript")
+//    public ResponseEntity<byte[]> downloadTranscript() {
+//        try {
+//            // Example of fetching transcript from DB or generating it on demand
+//            byte[] transcript = "Generated Transcript".getBytes();
+//
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=transcript.txt")
+//                    .body(transcript);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+//    
+    
 }
