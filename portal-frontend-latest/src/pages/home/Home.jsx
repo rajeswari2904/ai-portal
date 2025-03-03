@@ -8,6 +8,7 @@ import { AiOutlineFullscreenExit } from "react-icons/ai";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
 function Home() {
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ function Home() {
     setIsFullscreen((prevState) => !prevState); // Toggle fullscreen state
   };
 
-  const username = localStorage.getItem("username");
+  const username = sessionStorage.getItem("username");
   const name = username.split("@")[0];
 
   const handleFileChange = (e) => {
@@ -31,6 +32,14 @@ function Home() {
   const handleFileUpload = async (e) => {
     e.preventDefault();
     setLoad(true);
+
+    const token = sessionStorage.getItem("session_token");
+    if (!token) {
+      console.error("No session token found. Redirecting to login...");
+      navigate("/");
+      return;
+    }
+
     const formData = new FormData();
 
     // Append the audio file to formData
@@ -38,6 +47,8 @@ function Home() {
     formData.append("saveTranscript", saveTranscript); // Append saveTranscript data
     formData.append("username", username); // Append username
     console.log(audioFile.name);
+
+
     try {
       const response = await axios.post(
         `http://localhost:8080/api/upload`, // Your backend endpoint
@@ -45,6 +56,7 @@ function Home() {
         {
           headers: {
             "Content-Type": "multipart/form-data", // This ensures the backend understands it's multipart
+            "Authorization": `Bearer ${token}`,
           },
         }
       );
@@ -78,7 +90,8 @@ function Home() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("username");
+    sessionStorage.removeItem("session_token"); // Remove JWT
+    sessionStorage.removeItem("username");//Remove username
     navigate("/");
   };
 

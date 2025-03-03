@@ -76,8 +76,14 @@ function Login() {
       console.log(response);
 
       if (response.status === 200) {
-        // Save username to localStorage (if you have it in the credentials)
-        localStorage.setItem("username", credentials.username);
+
+        const token = response.data; // Extract JWT token
+
+        // Store token securely in sessionStorage
+        sessionStorage.setItem("session_token", token);
+
+        // Save username to session storage
+        sessionStorage.setItem("username", credentials.username);
 
         // Redirect to the home page
         navigate("/home");
