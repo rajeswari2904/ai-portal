@@ -33,13 +33,6 @@ function Home() {
     e.preventDefault();
     setLoad(true);
 
-    const token = sessionStorage.getItem("session_token");
-    if (!token) {
-      console.error("No session token found. Redirecting to login...");
-      navigate("/");
-      return;
-    }
-
     const formData = new FormData();
 
     // Append the audio file to formData
@@ -56,7 +49,6 @@ function Home() {
         {
           headers: {
             "Content-Type": "multipart/form-data", // This ensures the backend understands it's multipart
-            "Authorization": `Bearer ${token}`,
           },
         }
       );
@@ -90,7 +82,6 @@ function Home() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("session_token"); // Remove JWT
     sessionStorage.removeItem("username");//Remove username
     navigate("/");
   };

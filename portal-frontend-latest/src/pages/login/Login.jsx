@@ -76,11 +76,6 @@ function Login() {
       console.log(response);
 
       if (response.status === 200) {
-        const token = response.data; // Extract JWT token
-
-        // Store token securely in sessionStorage
-        sessionStorage.setItem("session_token", token);
-
         // Save username to session storage
         sessionStorage.setItem("username", credentials.username);
 
